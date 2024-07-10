@@ -1,0 +1,31 @@
+(*/* Template of a page */*)
+
+Component[OptionsPattern[]] := With[{
+    UId = CreateUUID[],
+    Payload = ExportString[FrontEndVirtual[OptionValue["Expression"]], "ExpressionJSON", "Compact"->1]
+},
+    <html> 
+        <head>
+            <script type="module" src="https://cdn.statically.io/gh/JerryI/wljs-interpreter/dev/src/interpreter.js"></script>
+            <script type="module" src="https://cdn.statically.io/gh/JerryI/wljs-interpreter/dev/src/core.js"></script>
+            <script type="module" src="https://cdn.statically.io/gh/JerryI/wljs-sharedlib-d3/main/dist/kernel.js"></script>
+            <script type="module" src="https://cdn.statically.io/gh/JerryI/wljs-graphics-d3/dev/dist/kernel.js"></script>
+            <script type="module" src="https://cdn.statically.io/gh/JerryI/wljs-plotly/dev/dist/kernel.js"></script>
+            <script type="module" src="https://cdn.statically.io/gh/JerryI/Mathematica-ThreeJS-graphics-engine/dev/dist/kernel.js"></script>
+            <link href="https://cdn.statically.io/gh/JerryI/wljs-graphics-d3/dev/src/styles.css" rel="stylesheet" />            
+            <WLJSTransportScript Port={0}/>
+        </head>  
+        <body> 
+            <div id="{UId}"></div>
+            <script type="module">
+                const payload = <Payload/>;
+                const env = {global: {}, element: document.getElementById('<UId/>')};
+                interpretate(payload, env);
+            </script>
+        </body>
+    </html>
+]
+
+Options[Component] = {"Expression" -> Null}
+
+Component
